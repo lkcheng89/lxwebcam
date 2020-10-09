@@ -208,11 +208,11 @@ void loop()
   // Supported Command Set
   //
   // * LX
-  // * LX [ON|OFF]; OFF is default value
+  // * LX [ON|OFF]; OFF is default state
   // * SHUTTER
-  // * SHUTTER [OPEN|CLOSE]; CLOSE is default value
+  // * SHUTTER [OPEN|CLOSE]; CLOSE is default state
   // * AMP
-  // * AMP [ON|OFF]; ON is default value
+  // * AMP [ON|OFF]; ON is default state
   // * START <duration>
   // * STOP
   // * RA+ <duration>
