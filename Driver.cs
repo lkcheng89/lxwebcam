@@ -247,7 +247,7 @@ namespace ASCOM.LxWebcam
         {
             get
             {
-                bool connected = (this.webcam != null);
+                bool connected = (this.webcam != null && this.comPort != null);
                 LogMessage("Connected_get", connected.ToString());
                 return connected;
             }
@@ -442,14 +442,40 @@ namespace ASCOM.LxWebcam
 
                     if (this.webcam != null)
                     {
+                        try
+                        {
+                            this.webcam.Close();
+                        }
+                        catch
+                        {
+
+                        }
+                        finally
+                        {
+                            this.webcam = null;
+                        }
+                    }
+
+                    if (this.comPort != null)
+                    {
                         ComPort.Response response = comPort.Lx(false);
                         LogMessage("Connected_set", response.ToString());
 
                         response = comPort.Amp(true);
                         LogMessage("Connected_set", response.ToString());
 
-                        this.webcam.Close();
-                        this.webcam = null;
+                        try
+                        {
+                            this.comPort.Close();
+                        }
+                        catch
+                        {
+
+                        }
+                        finally
+                        {
+                            this.comPort = null;
+                        }
                     }
                 }
             }
@@ -573,14 +599,17 @@ namespace ASCOM.LxWebcam
         {
             this.CheckConnected("AbortExposure");
 
-            exposureAbort = DateTime.Now;
-
-            ComPort.Response response = this.comPort.Stop();
-            LogMessage("AbortExposure", response.ToString());
-
-            if (response.Reply != "OK")
+            if (this.cameraState != CameraStates.cameraIdle)
             {
-                throw new InvalidOperationException("AbortExposure");
+                exposureAbort = DateTime.Now;
+
+                ComPort.Response response = this.comPort.Stop();
+                LogMessage("AbortExposure", response.ToString());
+
+                if (response.Reply != "OK")
+                {
+                    throw new InvalidOperationException("AbortExposure");
+                }
             }
         }
 
@@ -588,8 +617,9 @@ namespace ASCOM.LxWebcam
         {
             get
             {
-                LogMessage("BayerOffsetX_get", "PropertyNotImplementedException");
-                throw new ASCOM.PropertyNotImplementedException("BayerOffsetX", false);
+                short bayerOffsetX = 0;
+                LogMessage("BayerOffsetX_get", bayerOffsetX.ToString());
+                return bayerOffsetX;
             }
         }
 
@@ -597,8 +627,9 @@ namespace ASCOM.LxWebcam
         {
             get
             {
-                LogMessage("BayerOffsetY_get", "PropertyNotImplementedException");
-                throw new ASCOM.PropertyNotImplementedException("BayerOffsetX", true);
+                short bayerOffsetY = 0;
+                LogMessage("BayerOffsetY_get", bayerOffsetY.ToString());
+                return bayerOffsetY;
             }
         }
 
@@ -877,17 +908,15 @@ namespace ASCOM.LxWebcam
         {
             get
             {
+                CheckConnected("ImageArray_get");
+
                 if (!imageReady || this.imageArray == null)
                 {
                     LogMessage("ImageArray_get", "InvalidOperationException");
                     throw new ASCOM.InvalidOperationException();
                 }
 
-                int[,,] imageArray = this.imageArray;
-                this.imageArray = null;
-                imageReady = false;
-
-                return imageArray;
+                return this.imageArray;
             }
         }
 
@@ -895,6 +924,8 @@ namespace ASCOM.LxWebcam
         {
             get
             {
+                CheckConnected("ImageArrayVariant_get");
+
                 if (!imageReady || imageArray == null)
                 {
                     LogMessage("ImageArrayVariant_get", "InvalidOperationException");
@@ -913,9 +944,6 @@ namespace ASCOM.LxWebcam
                     }
                 }
 
-                imageArray = null;
-                imageReady = false;
-
                 return imageArrayVariant;
             }
         }
@@ -924,7 +952,8 @@ namespace ASCOM.LxWebcam
         {
             get
             {
-                this.CheckConnected("ImageReady_get");
+                CheckConnected("ImageReady_get");
+
                 LogMessage("ImageReady_get", imageReady.ToString());
                 return imageReady;
             }
@@ -934,7 +963,7 @@ namespace ASCOM.LxWebcam
         {
             get
             {
-                this.CheckConnected("IsPulseGuiding_get");
+                CheckConnected("IsPulseGuiding_get");
 
                 HashSet<string> states = new HashSet<string>();
                 ComPort.Response response = this.comPort.State(states);
@@ -1202,6 +1231,7 @@ namespace ASCOM.LxWebcam
             exposureStart = DateTime.Now;
 
             imageReady = false;
+            imageArray = null;
             cameraState = CameraStates.cameraWaiting;
 
             try
@@ -1246,12 +1276,15 @@ namespace ASCOM.LxWebcam
         {
             this.CheckConnected("StopExposure");
 
-            ComPort.Response response = this.comPort.Stop();
-            LogMessage("StopExposure", response.ToString());
-
-            if (response.Reply != "OK")
+            if (this.cameraState != CameraStates.cameraIdle)
             {
-                throw new InvalidOperationException("StopExposure");
+                ComPort.Response response = this.comPort.Stop();
+                LogMessage("StopExposure", response.ToString());
+
+                if (response.Reply != "OK")
+                {
+                    throw new InvalidOperationException("StopExposure");
+                }
             }
         }
 

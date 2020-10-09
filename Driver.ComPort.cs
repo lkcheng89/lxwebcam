@@ -104,6 +104,7 @@ namespace ASCOM.LxWebcam
                                 }
                                 finally
                                 {
+                                    this.serialPort.Dispose();
                                     this.serialPort = null;
                                 }
                             }
@@ -118,20 +119,21 @@ namespace ASCOM.LxWebcam
             {
                 lock (this)
                 {
-                    try
+                    if (this.serialPort != null)
                     {
-                        if (this.serialPort != null)
+                        try
                         {
                             this.serialPort.Close();
                         }
-                    }
-                    catch (Exception e)
-                    {
-                        throw e;
-                    }
-                    finally
-                    {
-                        this.serialPort = null;
+                        catch (Exception e)
+                        {
+                            throw e;
+                        }
+                        finally
+                        {
+                            this.serialPort.Dispose();
+                            this.serialPort = null;
+                        }
                     }
                 }
             }
