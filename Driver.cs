@@ -153,8 +153,10 @@ namespace ASCOM.LxWebcam
             webcam = null;
             comPort = null;
 
-            numX = cameraXSize;
-            numY = cameraYSize;
+            cameraXSize = 0;
+            cameraYSize = 0;
+            numX = 0;
+            numY = 0;
             startX = 0;
             startY = 0;
             exposureMin = double.NaN;
@@ -188,7 +190,7 @@ namespace ASCOM.LxWebcam
         /// </summary>
         public void SetupDialog()
         {
-            if (this.webcam != null)
+            if (this.webcam != null && this.comPort != null)
             {
                 System.Windows.Forms.MessageBox.Show("Already connected, just press OK");
             }
@@ -582,16 +584,16 @@ namespace ASCOM.LxWebcam
 
                 if (!this.threadRunning)
                 {
-                    cameraState = CameraStates.cameraIdle; break;
+                    this.cameraState = CameraStates.cameraIdle; break;
                 }
 
-                if (success && exposureStart > exposureAbort)
+                if (success && this.exposureStart > this.exposureAbort)
                 {
-                    cameraState = CameraStates.cameraReading;
-                    imageReady = this.webcam.Capture(out this.imageArray, startX, startY, numX, numY);
+                    this.cameraState = CameraStates.cameraReading;
+                    this.imageReady = this.webcam.Capture(out this.imageArray, startX, startY, numX, numY);
                 }
 
-                cameraState = CameraStates.cameraIdle;
+                this.cameraState = CameraStates.cameraIdle;
             }
         }
 
@@ -601,7 +603,7 @@ namespace ASCOM.LxWebcam
 
             if (this.cameraState != CameraStates.cameraIdle)
             {
-                exposureAbort = DateTime.Now;
+                this.exposureAbort = DateTime.Now;
 
                 ComPort.Response response = this.comPort.Stop();
                 LogMessage("AbortExposure", response.ToString());
@@ -644,7 +646,7 @@ namespace ASCOM.LxWebcam
             set
             {
                 LogMessage("BinX_set", value.ToString());
-                if (value != 1) throw new ASCOM.InvalidValueException("BinX", value.ToString(), "1"); // Only 1 is valid in this simple template
+                if (value != 1) throw new ASCOM.InvalidValueException("BinX", value.ToString(), "1");
             }
         }
 
@@ -659,7 +661,7 @@ namespace ASCOM.LxWebcam
             set
             {
                 LogMessage("BinY_set", value.ToString());
-                if (value != 1) throw new ASCOM.InvalidValueException("BinY", value.ToString(), "1"); // Only 1 is valid in this simple template
+                if (value != 1) throw new ASCOM.InvalidValueException("BinY", value.ToString(), "1");
             }
         }
 
@@ -676,6 +678,8 @@ namespace ASCOM.LxWebcam
         {
             get
             {
+                this.CheckConnected("CameraState_get");
+
                 LogMessage("CameraState_get", this.cameraState.ToString());
                 return this.cameraState;
             }
@@ -685,8 +689,10 @@ namespace ASCOM.LxWebcam
         {
             get
             {
-                LogMessage("CameraXSize_get", cameraXSize.ToString());
-                return cameraXSize;
+                this.CheckConnected("CameraXSize_get");
+
+                LogMessage("CameraXSize_get", this.cameraXSize.ToString());
+                return this.cameraXSize;
             }
         }
 
@@ -694,8 +700,10 @@ namespace ASCOM.LxWebcam
         {
             get
             {
-                LogMessage("CameraYSize_get", cameraYSize.ToString());
-                return cameraYSize;
+                this.CheckConnected("CameraYSize_get");
+
+                LogMessage("CameraYSize_get", this.cameraYSize.ToString());
+                return this.cameraYSize;
             }
         }
 
@@ -798,8 +806,10 @@ namespace ASCOM.LxWebcam
         {
             get
             {
-                LogMessage("ExposureMax_get", exposureMax.ToString());
-                return exposureMax;
+                this.CheckConnected("ExposureMax_get");
+
+                LogMessage("ExposureMax_get", this.exposureMax.ToString());
+                return this.exposureMax;
             }
         }
 
@@ -807,8 +817,10 @@ namespace ASCOM.LxWebcam
         {
             get
             {
-                LogMessage("ExposureMin_get", exposureMin.ToString());
-                return exposureMin;
+                this.CheckConnected("ExposureMin_get");
+
+                LogMessage("ExposureMin_get", this.exposureMin.ToString());
+                return this.exposureMin;
             }
         }
 
@@ -816,6 +828,8 @@ namespace ASCOM.LxWebcam
         {
             get
             {
+                this.CheckConnected("ExposureResolution_get");
+
                 double resolution = 0.001;
                 LogMessage("ExposureResolution_get", resolution.ToString());
                 return resolution;
@@ -910,7 +924,7 @@ namespace ASCOM.LxWebcam
             {
                 CheckConnected("ImageArray_get");
 
-                if (!imageReady || this.imageArray == null)
+                if (!this.imageReady || this.imageArray == null)
                 {
                     LogMessage("ImageArray_get", "InvalidOperationException");
                     throw new ASCOM.InvalidOperationException();
@@ -926,21 +940,21 @@ namespace ASCOM.LxWebcam
             {
                 CheckConnected("ImageArrayVariant_get");
 
-                if (!imageReady || imageArray == null)
+                if (!this.imageReady || this.imageArray == null)
                 {
                     LogMessage("ImageArrayVariant_get", "InvalidOperationException");
                     throw new ASCOM.InvalidOperationException();
                 }
 
-                object[,,] imageArrayVariant = new object[numX, numY, 3];
+                object[,,] imageArrayVariant = new object[this.numX, this.numY, 3];
 
-                for (int x = 0; x < numX; x++)
+                for (int x = 0; x < this.numX; x++)
                 {
-                    for (int y = 0; y < numY; y++)
+                    for (int y = 0; y < this.numY; y++)
                     {
-                        imageArrayVariant[x, y, 0] = imageArray[x, y, 0];
-                        imageArrayVariant[x, y, 1] = imageArray[x, y, 1];
-                        imageArrayVariant[x, y, 2] = imageArray[x, y, 2];
+                        imageArrayVariant[x, y, 0] = this.imageArray[x, y, 0];
+                        imageArrayVariant[x, y, 1] = this.imageArray[x, y, 1];
+                        imageArrayVariant[x, y, 2] = this.imageArray[x, y, 2];
                     }
                 }
 
@@ -954,7 +968,7 @@ namespace ASCOM.LxWebcam
             {
                 CheckConnected("ImageReady_get");
 
-                LogMessage("ImageReady_get", imageReady.ToString());
+                LogMessage("ImageReady_get", this.imageReady.ToString());
                 return imageReady;
             }
         }
@@ -982,14 +996,14 @@ namespace ASCOM.LxWebcam
         {
             get
             {
-                if (!imageReady)
+                if (!this.imageReady)
                 {
-                    LogMessage("LastExposureDuration_get", "Throwing InvalidOperationException because of a call to LastExposureDuration before the first image has been taken!");
-                    throw new ASCOM.InvalidOperationException("Call to LastExposureDuration before the first image has been taken!");
+                    LogMessage("LastExposureDuration_get", "InvalidOperationException");
+                    throw new ASCOM.InvalidOperationException("LastExposureStartTime_get");
                 }
 
-                LogMessage("LastExposureDuration_get", exposureDuration.ToString());
-                return exposureDuration;
+                LogMessage("LastExposureDuration_get", this.exposureDuration.ToString());
+                return this.exposureDuration;
             }
         }
 
@@ -997,15 +1011,15 @@ namespace ASCOM.LxWebcam
         {
             get
             {
-                if (!imageReady)
+                if (!this.imageReady)
                 {
                     LogMessage("LastExposureStartTime_get", "InvalidOperationException");
                     throw new ASCOM.InvalidOperationException("LastExposureStartTime_get");
                 }
 
-                string exposureStartString = exposureStart.ToString("yyyy-MM-ddTHH:mm:ss");
-                LogMessage("LastExposureStartTime_get", exposureStartString.ToString());
-                return exposureStartString;
+                string exposureStart = this.exposureStart.ToString("yyyy-MM-ddTHH:mm:ss");
+                LogMessage("LastExposureStartTime_get", exposureStart);
+                return exposureStart;
             }
         }
 
@@ -1013,8 +1027,9 @@ namespace ASCOM.LxWebcam
         {
             get
             {
-                LogMessage("MaxADU_get", "255");
-                return 255;
+                int maxADU = 255;
+                LogMessage("MaxADU_get", maxADU.ToString());
+                return maxADU;
             }
         }
 
@@ -1022,8 +1037,9 @@ namespace ASCOM.LxWebcam
         {
             get
             {
-                LogMessage("MaxBinX_get", "1");
-                return 1;
+                short maxBinX = 1;
+                LogMessage("MaxBinX_get", maxBinX.ToString());
+                return maxBinX;
             }
         }
 
@@ -1031,8 +1047,9 @@ namespace ASCOM.LxWebcam
         {
             get
             {
-                LogMessage("MaxBinY_get", "1");
-                return 1;
+                short maxBinY = 1;
+                LogMessage("MaxBinY_get", maxBinY.ToString());
+                return maxBinY;
             }
         }
 
@@ -1040,12 +1057,12 @@ namespace ASCOM.LxWebcam
         {
             get
             {
-                LogMessage("NumX_get", numX.ToString());
-                return numX;
+                LogMessage("NumX_get", this.numX.ToString());
+                return this.numX;
             }
             set
             {
-                numX = value;
+                this.numX = value;
                 LogMessage("NumX_set", value.ToString());
             }
         }
@@ -1054,12 +1071,12 @@ namespace ASCOM.LxWebcam
         {
             get
             {
-                LogMessage("NumY_get", numY.ToString());
-                return numY;
+                LogMessage("NumY_get", this.numY.ToString());
+                return this.numY;
             }
             set
             {
-                numY = value;
+                this.numY = value;
                 LogMessage("NumY_set", value.ToString());
             }
         }
@@ -1068,12 +1085,12 @@ namespace ASCOM.LxWebcam
         {
             get
             {
-                if (exposureStart == DateTime.MinValue || double.IsNaN(exposureDuration))
+                if (this.exposureStart == DateTime.MinValue || double.IsNaN(this.exposureDuration))
                 {
                     return 0;
                 }
 
-                short percentCompleted = (short)(Math.Min(Math.Max((DateTime.Now - exposureStart).TotalSeconds / exposureDuration, 0), 1) * 100);
+                short percentCompleted = (short)(Math.Min(Math.Max((DateTime.Now - this.exposureStart).TotalSeconds / this.exposureDuration, 0), 1) * 100);
                 LogMessage("PercentCompleted_get", percentCompleted.ToString());
                 return percentCompleted;
             }
@@ -1101,7 +1118,7 @@ namespace ASCOM.LxWebcam
         {
             this.CheckConnected("PulseGuide");
 
-            if (Duration < pulseGuideMin || pulseGuideMax < Duration)
+            if (Duration < this.pulseGuideMin || this.pulseGuideMax < Duration)
             {
                 throw new InvalidValueException("PulseGuide", Duration.ToString(), pulseGuideMin.ToString(), pulseGuideMax.ToString());
             }
@@ -1211,13 +1228,37 @@ namespace ASCOM.LxWebcam
 
         public void StartExposure(double Duration, bool Light)
         {
-            if (Duration == 0) Duration = exposureMin;
-            if (Duration < exposureMin || exposureMax < Duration) throw new InvalidValueException("StartExposure", Duration.ToString(), exposureMin.ToString(), exposureMax.ToString());
+            this.CheckConnected("StartExposure");
 
-            if (startX < 0 || cameraXSize <= startX) throw new InvalidValueException("StartExposure", startX.ToString(), "0", (cameraXSize - 1).ToString());
-            if (startY < 0 || cameraYSize <= startY) throw new InvalidValueException("StartExposure", startY.ToString(), "0", (cameraYSize - 1).ToString());
-            if (numX < 1 || cameraXSize - startX < numX) throw new InvalidValueException("StartExposure", numX.ToString(), "1", (cameraXSize - startX).ToString());
-            if (numY < 1 || cameraYSize - startY < numY) throw new InvalidValueException("StartExposure", numY.ToString(), "1", (cameraYSize - startY).ToString());
+            if (Duration < this.exposureMin || this.exposureMax < Duration)
+            {
+                if (Duration != 0)
+                {
+                    throw new InvalidValueException("StartExposure", Duration.ToString(), exposureMin.ToString(), exposureMax.ToString());
+                }
+
+                Duration = exposureMin;
+            }
+
+            if (this.startX < 0 || this.cameraXSize <= this.startX)
+            {
+                throw new InvalidValueException("StartExposure", this.startX.ToString(), "0", (this.cameraXSize - 1).ToString());
+            }
+
+            if (this.startY < 0 || this.cameraYSize <= this.startY)
+            {
+                throw new InvalidValueException("StartExposure", this.startY.ToString(), "0", (this.cameraYSize - 1).ToString());
+            }
+
+            if (this.numX < 1 || this.cameraXSize - this.startX < this.numX)
+            {
+                throw new InvalidValueException("StartExposure", this.numX.ToString(), "1", (this.cameraXSize - this.startX).ToString());
+            }
+
+            if (this.numY < 1 || this.cameraYSize - this.startY < this.numY)
+            {
+                throw new InvalidValueException("StartExposure", this.numY.ToString(), "1", (this.cameraYSize - this.startY).ToString());
+            }
 
             ComPort.Response response = this.comPort.Start((int)(Duration * 1000 + 0.5));
             LogMessage("StartExposure", response.ToString());
@@ -1227,12 +1268,12 @@ namespace ASCOM.LxWebcam
                 throw new InvalidOperationException("StartExposure");
             }
 
-            exposureDuration = Duration;
-            exposureStart = DateTime.Now;
+            this.exposureDuration = Duration;
+            this.exposureStart = DateTime.Now;
 
-            imageReady = false;
-            imageArray = null;
-            cameraState = CameraStates.cameraWaiting;
+            this.imageReady = false;
+            this.imageArray = null;
+            this.cameraState = CameraStates.cameraWaiting;
 
             try
             {
@@ -1248,12 +1289,12 @@ namespace ASCOM.LxWebcam
         {
             get
             {
-                LogMessage("StartX_get", startX.ToString());
-                return startX;
+                LogMessage("StartX_get", this.startX.ToString());
+                return this.startX;
             }
             set
             {
-                startX = value;
+                this.startX = value;
                 LogMessage("StartX_set", value.ToString());
             }
         }
@@ -1262,12 +1303,12 @@ namespace ASCOM.LxWebcam
         {
             get
             {
-                LogMessage("StartY_get", startY.ToString());
-                return startY;
+                LogMessage("StartY_get", this.startY.ToString());
+                return this.startY;
             }
             set
             {
-                startY = value;
+                this.startY = value;
                 LogMessage("StartY_set", value.ToString());
             }
         }
@@ -1443,6 +1484,6 @@ namespace ASCOM.LxWebcam
             string msg = string.Format(CultureInfo.InvariantCulture, message, args);
             traceLogger.LogMessage(identifier, msg);
         }
-#endregion
+        #endregion
     }
 }
