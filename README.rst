@@ -1,7 +1,16 @@
 ASCOM Driver for Webcam with LX Modification
 ============================================
 
-This repository provides the ASCOM driver for Webcam with LX Modification. ST4 interface is also supported for guided astrophotoraphy.
+This repository provides the ASCOM driver for Webcam with LX Modification. The following features are included:
+
+* ASCOM driver controls LX-Modded webcam via builtin USB-To-Serial Port of Arduino Nano.
+* Philips SPC900NC webcam is used to build and pass the conformance test.
+* Pulse guide (via ST4 interface) is also supported for guided astrophotoraphy.
+
+The firmware (saved as *.ino) is also included in this project and is easily found in the root directory.
+
+* For the Schematics and PCB, please refer to https://easyeda.com/lkcheng89/lxwebcam
+* For the Mechanical Enclosure, please refer to https://www.thingiverse.com/thing:4601845
 
 Prerequisites
 --------------
