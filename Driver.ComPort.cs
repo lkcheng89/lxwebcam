@@ -275,7 +275,7 @@ namespace ASCOM.LxWebcam
 
             public Response Start(int duration)
             {
-                return this.Handshake("START", duration.ToString());
+                return this.Handshake("START", duration.ToString(CultureInfo.InvariantCulture));
             }
 
             public Response Stop()
@@ -285,22 +285,22 @@ namespace ASCOM.LxWebcam
 
             public Response East(int duration)
             {
-                return this.Handshake("RA+", duration.ToString());
+                return this.Handshake("RA+", duration.ToString(CultureInfo.InvariantCulture));
             }
 
             public Response North(int duration)
             {
-                return this.Handshake("DEC+", duration.ToString());
+                return this.Handshake("DEC+", duration.ToString(CultureInfo.InvariantCulture));
             }
 
             public Response South(int duration)
             {
-                return this.Handshake("DEC-", duration.ToString());
+                return this.Handshake("DEC-", duration.ToString(CultureInfo.InvariantCulture));
             }
 
             public Response West(int duration)
             {
-                return this.Handshake("RA-", duration.ToString());
+                return this.Handshake("RA-", duration.ToString(CultureInfo.InvariantCulture));
             }
 
             public Response Duration(string action, out int min, out int max)
@@ -311,8 +311,8 @@ namespace ASCOM.LxWebcam
                 {
                     Match match = Regex.Match(response.Reply, "(?<Min>\\d+)\\s+(?<Max>\\d+)");
 
-                    if (match.Success && int.TryParse(match.Groups["Min"].Value, out min) &&
-                                         int.TryParse(match.Groups["Max"].Value, out max))
+                    if (match.Success && int.TryParse(match.Groups["Min"].Value, NumberStyles.Number, CultureInfo.InvariantCulture, out min) &&
+                                         int.TryParse(match.Groups["Max"].Value, NumberStyles.Number, CultureInfo.InvariantCulture, out max))
                     {
                         response.Assign(Response.OK);
                     }

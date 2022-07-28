@@ -5,8 +5,8 @@
 [Setup]
 AppID={{ce04c813-07fb-453a-8856-c02ab5543a42}
 AppName=LxWebcam Driver
-AppVerName=LxWebcam Driver v0.1
-AppVersion=0.1
+AppVerName=LxWebcam Driver v0.2
+AppVersion=0.2
 AppPublisher=Lung-Kai Cheng <lkcheng8@gmail.com>
 AppPublisherURL=mailto:lkcheng8@gmail.com
 AppSupportURL=https://github.com/lkcheng89/lxwebcam

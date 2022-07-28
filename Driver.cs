@@ -79,27 +79,27 @@ namespace ASCOM.LxWebcam
         internal static string mediaTypeProfileName = "MediaType";
         internal static string mediaTypeDefault = "";
         internal static string pixelSizeXProfileName = "PixelSizeX";
-        internal static string pixelSizeXDefault = "5.6";
+        internal static double pixelSizeXDefault = 5.6;
         internal static string pixelSizeYProfileName = "PixelSizeY";
-        internal static string pixelSizeYDefault = "5.6";
+        internal static double pixelSizeYDefault = 5.6;
 
         internal static string comPortProfileName = "ComPort";
         internal static string comPortDefault = "COM1";
         internal static string baudRateProfileName = "BaudRate";
-        internal static string baudRateDefault = "9600";
+        internal static int baudRateDefault = 9600;
         internal static string parityProfileName = "Parity";
-        internal static string parityDefault = "None";
+        internal static Parity parityDefault = Parity.None;
         internal static string dataBitsProfileName = "DataBits";
-        internal static string dataBitsDefault = "8";
+        internal static int dataBitsDefault = 8;
         internal static string stopBitsProfileName = "StopBits";
-        internal static string stopBitsDefault = "One";
+        internal static StopBits stopBitsDefault = StopBits.One;
         internal static string readTimeoutProfileName = "ReadTimeout";
-        internal static string readTimeoutDefault = "1000";
+        internal static int readTimeoutDefault = 1000;
         internal static string writeTimeoutProfileName = "WriteTimeout";
-        internal static string writeTimeoutDefault = "1000";
+        internal static int writeTimeoutDefault = 1000;
 
         internal static string traceLoggerProfileName = "TraceLogger";
-        internal static string traceLoggerDefault = "false";
+        internal static bool traceLoggerDefault = false;
 
         internal static string webcamName;  // Variables to hold the currrent device configuration
         internal static VideoInfoHeader mediaType;
@@ -250,12 +250,12 @@ namespace ASCOM.LxWebcam
             get
             {
                 bool connected = (this.webcam != null && this.comPort != null);
-                LogMessage("Connected_get", connected.ToString());
+                LogMessage("Connected_get", connected.ToString(CultureInfo.InvariantCulture));
                 return connected;
             }
             set
             {
-                LogMessage("Connected_set", value.ToString());
+                LogMessage("Connected_set", value.ToString(CultureInfo.InvariantCulture));
 
                 if (value)
                 {
@@ -620,7 +620,7 @@ namespace ASCOM.LxWebcam
             get
             {
                 short bayerOffsetX = 0;
-                LogMessage("BayerOffsetX_get", bayerOffsetX.ToString());
+                LogMessage("BayerOffsetX_get", bayerOffsetX.ToString(CultureInfo.InvariantCulture));
                 return bayerOffsetX;
             }
         }
@@ -630,7 +630,7 @@ namespace ASCOM.LxWebcam
             get
             {
                 short bayerOffsetY = 0;
-                LogMessage("BayerOffsetY_get", bayerOffsetY.ToString());
+                LogMessage("BayerOffsetY_get", bayerOffsetY.ToString(CultureInfo.InvariantCulture));
                 return bayerOffsetY;
             }
         }
@@ -640,13 +640,13 @@ namespace ASCOM.LxWebcam
             get
             {
                 short binX = 1;
-                LogMessage("BinX_get", binX.ToString());
+                LogMessage("BinX_get", binX.ToString(CultureInfo.InvariantCulture));
                 return binX;
             }
             set
             {
-                LogMessage("BinX_set", value.ToString());
-                if (value != 1) throw new ASCOM.InvalidValueException("BinX", value.ToString(), "1");
+                LogMessage("BinX_set", value.ToString(CultureInfo.InvariantCulture));
+                if (value != 1) throw new ASCOM.InvalidValueException("BinX", value.ToString(CultureInfo.InvariantCulture), "1");
             }
         }
 
@@ -655,13 +655,13 @@ namespace ASCOM.LxWebcam
             get
             {
                 short binY = 1;
-                LogMessage("BinY_get", binY.ToString());
+                LogMessage("BinY_get", binY.ToString(CultureInfo.InvariantCulture));
                 return binY;
             }
             set
             {
-                LogMessage("BinY_set", value.ToString());
-                if (value != 1) throw new ASCOM.InvalidValueException("BinY", value.ToString(), "1");
+                LogMessage("BinY_set", value.ToString(CultureInfo.InvariantCulture));
+                if (value != 1) throw new ASCOM.InvalidValueException("BinY", value.ToString(CultureInfo.InvariantCulture), "1");
             }
         }
 
@@ -691,7 +691,7 @@ namespace ASCOM.LxWebcam
             {
                 this.CheckConnected("CameraXSize_get");
 
-                LogMessage("CameraXSize_get", this.cameraXSize.ToString());
+                LogMessage("CameraXSize_get", this.cameraXSize.ToString(CultureInfo.InvariantCulture));
                 return this.cameraXSize;
             }
         }
@@ -702,7 +702,7 @@ namespace ASCOM.LxWebcam
             {
                 this.CheckConnected("CameraYSize_get");
 
-                LogMessage("CameraYSize_get", this.cameraYSize.ToString());
+                LogMessage("CameraYSize_get", this.cameraYSize.ToString(CultureInfo.InvariantCulture));
                 return this.cameraYSize;
             }
         }
@@ -711,7 +711,7 @@ namespace ASCOM.LxWebcam
         {
             get
             {
-                LogMessage("CanAbortExposure_get", true.ToString());
+                LogMessage("CanAbortExposure_get", true.ToString(CultureInfo.InvariantCulture));
                 return true;
             }
         }
@@ -720,7 +720,7 @@ namespace ASCOM.LxWebcam
         {
             get
             {
-                LogMessage("CanAsymmetricBin_get", false.ToString());
+                LogMessage("CanAsymmetricBin_get", false.ToString(CultureInfo.InvariantCulture));
                 return false;
             }
         }
@@ -729,7 +729,7 @@ namespace ASCOM.LxWebcam
         {
             get
             {
-                LogMessage("CanFastReadout_get", false.ToString());
+                LogMessage("CanFastReadout_get", false.ToString(CultureInfo.InvariantCulture));
                 return false;
             }
         }
@@ -738,7 +738,7 @@ namespace ASCOM.LxWebcam
         {
             get
             {
-                LogMessage("CanGetCoolerPower_get", false.ToString());
+                LogMessage("CanGetCoolerPower_get", false.ToString(CultureInfo.InvariantCulture));
                 return false;
             }
         }
@@ -747,7 +747,7 @@ namespace ASCOM.LxWebcam
         {
             get
             {
-                LogMessage("CanPulseGuide_get", true.ToString());
+                LogMessage("CanPulseGuide_get", true.ToString(CultureInfo.InvariantCulture));
                 return true;
             }
         }
@@ -756,7 +756,7 @@ namespace ASCOM.LxWebcam
         {
             get
             {
-                LogMessage("CanSetCCDTemperature_get", false.ToString());
+                LogMessage("CanSetCCDTemperature_get", false.ToString(CultureInfo.InvariantCulture));
                 return false;
             }
         }
@@ -765,7 +765,7 @@ namespace ASCOM.LxWebcam
         {
             get
             {
-                LogMessage("CanStopExposure_get", true.ToString());
+                LogMessage("CanStopExposure_get", true.ToString(CultureInfo.InvariantCulture));
                 return true;
             }
         }
@@ -808,7 +808,7 @@ namespace ASCOM.LxWebcam
             {
                 this.CheckConnected("ExposureMax_get");
 
-                LogMessage("ExposureMax_get", this.exposureMax.ToString());
+                LogMessage("ExposureMax_get", this.exposureMax.ToString(CultureInfo.InvariantCulture));
                 return this.exposureMax;
             }
         }
@@ -819,7 +819,7 @@ namespace ASCOM.LxWebcam
             {
                 this.CheckConnected("ExposureMin_get");
 
-                LogMessage("ExposureMin_get", this.exposureMin.ToString());
+                LogMessage("ExposureMin_get", this.exposureMin.ToString(CultureInfo.InvariantCulture));
                 return this.exposureMin;
             }
         }
@@ -831,7 +831,7 @@ namespace ASCOM.LxWebcam
                 this.CheckConnected("ExposureResolution_get");
 
                 double resolution = 0.001;
-                LogMessage("ExposureResolution_get", resolution.ToString());
+                LogMessage("ExposureResolution_get", resolution.ToString(CultureInfo.InvariantCulture));
                 return resolution;
             }
         }
@@ -904,7 +904,7 @@ namespace ASCOM.LxWebcam
         {
             get
             {
-                LogMessage("HasShutter_get", false.ToString());
+                LogMessage("HasShutter_get", false.ToString(CultureInfo.InvariantCulture));
                 return false;
             }
         }
@@ -968,7 +968,7 @@ namespace ASCOM.LxWebcam
             {
                 CheckConnected("ImageReady_get");
 
-                LogMessage("ImageReady_get", this.imageReady.ToString());
+                LogMessage("ImageReady_get", this.imageReady.ToString(CultureInfo.InvariantCulture));
                 return imageReady;
             }
         }
@@ -1002,7 +1002,7 @@ namespace ASCOM.LxWebcam
                     throw new ASCOM.InvalidOperationException("LastExposureStartTime_get");
                 }
 
-                LogMessage("LastExposureDuration_get", this.exposureDuration.ToString());
+                LogMessage("LastExposureDuration_get", this.exposureDuration.ToString(CultureInfo.InvariantCulture));
                 return this.exposureDuration;
             }
         }
@@ -1017,7 +1017,7 @@ namespace ASCOM.LxWebcam
                     throw new ASCOM.InvalidOperationException("LastExposureStartTime_get");
                 }
 
-                string exposureStart = this.exposureStart.ToString("yyyy-MM-ddTHH:mm:ss");
+                string exposureStart = this.exposureStart.ToString("yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture);
                 LogMessage("LastExposureStartTime_get", exposureStart);
                 return exposureStart;
             }
@@ -1028,7 +1028,7 @@ namespace ASCOM.LxWebcam
             get
             {
                 int maxADU = 255;
-                LogMessage("MaxADU_get", maxADU.ToString());
+                LogMessage("MaxADU_get", maxADU.ToString(CultureInfo.InvariantCulture));
                 return maxADU;
             }
         }
@@ -1038,7 +1038,7 @@ namespace ASCOM.LxWebcam
             get
             {
                 short maxBinX = 1;
-                LogMessage("MaxBinX_get", maxBinX.ToString());
+                LogMessage("MaxBinX_get", maxBinX.ToString(CultureInfo.InvariantCulture));
                 return maxBinX;
             }
         }
@@ -1048,7 +1048,7 @@ namespace ASCOM.LxWebcam
             get
             {
                 short maxBinY = 1;
-                LogMessage("MaxBinY_get", maxBinY.ToString());
+                LogMessage("MaxBinY_get", maxBinY.ToString(CultureInfo.InvariantCulture));
                 return maxBinY;
             }
         }
@@ -1057,13 +1057,13 @@ namespace ASCOM.LxWebcam
         {
             get
             {
-                LogMessage("NumX_get", this.numX.ToString());
+                LogMessage("NumX_get", this.numX.ToString(CultureInfo.InvariantCulture));
                 return this.numX;
             }
             set
             {
                 this.numX = value;
-                LogMessage("NumX_set", value.ToString());
+                LogMessage("NumX_set", value.ToString(CultureInfo.InvariantCulture));
             }
         }
 
@@ -1071,13 +1071,13 @@ namespace ASCOM.LxWebcam
         {
             get
             {
-                LogMessage("NumY_get", this.numY.ToString());
+                LogMessage("NumY_get", this.numY.ToString(CultureInfo.InvariantCulture));
                 return this.numY;
             }
             set
             {
                 this.numY = value;
-                LogMessage("NumY_set", value.ToString());
+                LogMessage("NumY_set", value.ToString(CultureInfo.InvariantCulture));
             }
         }
 
@@ -1091,7 +1091,7 @@ namespace ASCOM.LxWebcam
                 }
 
                 short percentCompleted = (short)(Math.Min(Math.Max((DateTime.Now - this.exposureStart).TotalSeconds / this.exposureDuration, 0), 1) * 100);
-                LogMessage("PercentCompleted_get", percentCompleted.ToString());
+                LogMessage("PercentCompleted_get", percentCompleted.ToString(CultureInfo.InvariantCulture));
                 return percentCompleted;
             }
         }
@@ -1100,7 +1100,7 @@ namespace ASCOM.LxWebcam
         {
             get
             {
-                LogMessage("PixelSizeX_get", pixelSizeX.ToString());
+                LogMessage("PixelSizeX_get", pixelSizeX.ToString(CultureInfo.InvariantCulture));
                 return pixelSizeX;
             }
         }
@@ -1109,7 +1109,7 @@ namespace ASCOM.LxWebcam
         {
             get
             {
-                LogMessage("PixelSizeY_get", pixelSizeY.ToString());
+                LogMessage("PixelSizeY_get", pixelSizeY.ToString(CultureInfo.InvariantCulture));
                 return pixelSizeY;
             }
         }
@@ -1120,7 +1120,7 @@ namespace ASCOM.LxWebcam
 
             if (Duration < this.pulseGuideMin || this.pulseGuideMax < Duration)
             {
-                throw new InvalidValueException("PulseGuide", Duration.ToString(), pulseGuideMin.ToString(), pulseGuideMax.ToString());
+                throw new InvalidValueException("PulseGuide", Duration.ToString(CultureInfo.InvariantCulture), pulseGuideMin.ToString(CultureInfo.InvariantCulture), pulseGuideMax.ToString(CultureInfo.InvariantCulture));
             }
 
             ComPort.Response response;
@@ -1172,13 +1172,13 @@ namespace ASCOM.LxWebcam
             get
             {
                 short readoutMode = 0;
-                LogMessage("ReadoutMode_get", readoutMode.ToString());
+                LogMessage("ReadoutMode_get", readoutMode.ToString(CultureInfo.InvariantCulture));
                 return readoutMode;
             }
             set
             {
-                LogMessage("ReadoutMode_set", value.ToString());
-                if (value != 0) throw new ASCOM.InvalidValueException("ReadoutMode_set", value.ToString(), "0");
+                LogMessage("ReadoutMode_set", value.ToString(CultureInfo.InvariantCulture));
+                if (value != 0) throw new ASCOM.InvalidValueException("ReadoutMode_set", value.ToString(CultureInfo.InvariantCulture), "0");
             }
         }
 
@@ -1234,7 +1234,7 @@ namespace ASCOM.LxWebcam
             {
                 if (Duration != 0)
                 {
-                    throw new InvalidValueException("StartExposure", Duration.ToString(), exposureMin.ToString(), exposureMax.ToString());
+                    throw new InvalidValueException("StartExposure", Duration.ToString(CultureInfo.InvariantCulture), exposureMin.ToString(CultureInfo.InvariantCulture), exposureMax.ToString(CultureInfo.InvariantCulture));
                 }
 
                 Duration = exposureMin;
@@ -1242,22 +1242,22 @@ namespace ASCOM.LxWebcam
 
             if (this.startX < 0 || this.cameraXSize <= this.startX)
             {
-                throw new InvalidValueException("StartExposure", this.startX.ToString(), "0", (this.cameraXSize - 1).ToString());
+                throw new InvalidValueException("StartExposure", this.startX.ToString(CultureInfo.InvariantCulture), "0", (this.cameraXSize - 1).ToString(CultureInfo.InvariantCulture));
             }
 
             if (this.startY < 0 || this.cameraYSize <= this.startY)
             {
-                throw new InvalidValueException("StartExposure", this.startY.ToString(), "0", (this.cameraYSize - 1).ToString());
+                throw new InvalidValueException("StartExposure", this.startY.ToString(CultureInfo.InvariantCulture), "0", (this.cameraYSize - 1).ToString(CultureInfo.InvariantCulture));
             }
 
             if (this.numX < 1 || this.cameraXSize - this.startX < this.numX)
             {
-                throw new InvalidValueException("StartExposure", this.numX.ToString(), "1", (this.cameraXSize - this.startX).ToString());
+                throw new InvalidValueException("StartExposure", this.numX.ToString(CultureInfo.InvariantCulture), "1", (this.cameraXSize - this.startX).ToString(CultureInfo.InvariantCulture));
             }
 
             if (this.numY < 1 || this.cameraYSize - this.startY < this.numY)
             {
-                throw new InvalidValueException("StartExposure", this.numY.ToString(), "1", (this.cameraYSize - this.startY).ToString());
+                throw new InvalidValueException("StartExposure", this.numY.ToString(CultureInfo.InvariantCulture), "1", (this.cameraYSize - this.startY).ToString(CultureInfo.InvariantCulture));
             }
 
             ComPort.Response response = this.comPort.Start((int)(Duration * 1000 + 0.5));
@@ -1289,13 +1289,13 @@ namespace ASCOM.LxWebcam
         {
             get
             {
-                LogMessage("StartX_get", this.startX.ToString());
+                LogMessage("StartX_get", this.startX.ToString(CultureInfo.InvariantCulture));
                 return this.startX;
             }
             set
             {
                 this.startX = value;
-                LogMessage("StartX_set", value.ToString());
+                LogMessage("StartX_set", value.ToString(CultureInfo.InvariantCulture));
             }
         }
 
@@ -1303,13 +1303,13 @@ namespace ASCOM.LxWebcam
         {
             get
             {
-                LogMessage("StartY_get", this.startY.ToString());
+                LogMessage("StartY_get", this.startY.ToString(CultureInfo.InvariantCulture));
                 return this.startY;
             }
             set
             {
                 this.startY = value;
-                LogMessage("StartY_set", value.ToString());
+                LogMessage("StartY_set", value.ToString(CultureInfo.InvariantCulture));
             }
         }
 
@@ -1432,18 +1432,55 @@ namespace ASCOM.LxWebcam
 
                 webcamName = driverProfile.GetValue(driverID, webcamProfileName, string.Empty, webcamDefault);
                 mediaType = Webcam.Parse(driverProfile.GetValue(driverID, mediaTypeProfileName, string.Empty, mediaTypeDefault));
-                pixelSizeX = Convert.ToDouble(driverProfile.GetValue(driverID, pixelSizeXProfileName, string.Empty, pixelSizeXDefault));
-                pixelSizeY = Convert.ToDouble(driverProfile.GetValue(driverID, pixelSizeYProfileName, string.Empty, pixelSizeYDefault));
+
+                if (!double.TryParse(driverProfile.GetValue(driverID, pixelSizeXProfileName, string.Empty, string.Empty), NumberStyles.Number, CultureInfo.InvariantCulture, out pixelSizeX))
+                {
+                    pixelSizeX = pixelSizeXDefault;
+                }
+
+                if (!double.TryParse(driverProfile.GetValue(driverID, pixelSizeYProfileName, string.Empty, string.Empty), NumberStyles.Number, CultureInfo.InvariantCulture, out pixelSizeY))
+                {
+                    pixelSizeY = pixelSizeYDefault;
+                }
 
                 comPortName = driverProfile.GetValue(driverID, comPortProfileName, string.Empty, comPortDefault);
-                baudRate = Convert.ToInt32(driverProfile.GetValue(driverID, baudRateProfileName, string.Empty, baudRateDefault));
-                parity = (Parity)Enum.Parse(typeof(Parity), driverProfile.GetValue(driverID, parityProfileName, string.Empty, parityDefault));
-                dataBits = Convert.ToInt32(driverProfile.GetValue(driverID, dataBitsProfileName, string.Empty, dataBitsDefault));
-                stopBits = (StopBits)Enum.Parse(typeof(StopBits), driverProfile.GetValue(driverID, stopBitsProfileName, string.Empty, stopBitsDefault));
-                readTimeout = Convert.ToInt32(driverProfile.GetValue(driverID, readTimeoutProfileName, string.Empty, readTimeoutDefault));
-                writeTimeout = Convert.ToInt32(driverProfile.GetValue(driverID, writeTimeoutProfileName, string.Empty, writeTimeoutDefault));
 
-                traceLogger.Enabled = Convert.ToBoolean(driverProfile.GetValue(driverID, traceLoggerProfileName, string.Empty, traceLoggerDefault));
+                if (!int.TryParse(driverProfile.GetValue(driverID, baudRateProfileName, string.Empty, string.Empty), NumberStyles.Number, CultureInfo.InvariantCulture, out baudRate))
+                {
+                    baudRate = baudRateDefault;
+                }
+
+                if (!Enum.TryParse(driverProfile.GetValue(driverID, parityProfileName, string.Empty, string.Empty), out parity))
+                {
+                    parity = parityDefault;
+                }
+
+                if (!int.TryParse(driverProfile.GetValue(driverID, dataBitsProfileName, string.Empty, string.Empty), NumberStyles.Number, CultureInfo.InvariantCulture, out dataBits))
+                {
+                    dataBits = dataBitsDefault;
+                }
+
+                if (!Enum.TryParse(driverProfile.GetValue(driverID, stopBitsProfileName, string.Empty, string.Empty), out stopBits))
+                {
+                    stopBits = stopBitsDefault;
+                }
+
+                if (!int.TryParse(driverProfile.GetValue(driverID, readTimeoutProfileName, string.Empty, string.Empty), NumberStyles.Number, CultureInfo.InvariantCulture, out readTimeout))
+                {
+                    readTimeout = readTimeoutDefault;
+                }
+
+                if (!int.TryParse(driverProfile.GetValue(driverID, writeTimeoutProfileName, string.Empty, string.Empty), NumberStyles.Number, CultureInfo.InvariantCulture, out writeTimeout))
+                {
+                    writeTimeout = writeTimeoutDefault;
+                }
+
+                if (!bool.TryParse(driverProfile.GetValue(driverID, traceLoggerProfileName, string.Empty, string.Empty), out bool traceLoggerEnabled))
+                {
+                    traceLoggerEnabled = traceLoggerDefault;
+                }
+
+                traceLogger.Enabled = traceLoggerEnabled;
             }
         }
 
@@ -1458,18 +1495,18 @@ namespace ASCOM.LxWebcam
 
                 driverProfile.WriteValue(driverID, webcamProfileName, webcamName);
                 driverProfile.WriteValue(driverID, mediaTypeProfileName, Webcam.ToString(mediaType));
-                driverProfile.WriteValue(driverID, pixelSizeXProfileName, pixelSizeX.ToString());
-                driverProfile.WriteValue(driverID, pixelSizeYProfileName, pixelSizeY.ToString());
+                driverProfile.WriteValue(driverID, pixelSizeXProfileName, pixelSizeX.ToString(CultureInfo.InvariantCulture));
+                driverProfile.WriteValue(driverID, pixelSizeYProfileName, pixelSizeY.ToString(CultureInfo.InvariantCulture));
 
                 driverProfile.WriteValue(driverID, comPortProfileName, comPortName);
-                driverProfile.WriteValue(driverID, baudRateProfileName, baudRate.ToString());
+                driverProfile.WriteValue(driverID, baudRateProfileName, baudRate.ToString(CultureInfo.InvariantCulture));
                 driverProfile.WriteValue(driverID, parityProfileName, parity.ToString());
-                driverProfile.WriteValue(driverID, dataBitsProfileName, dataBits.ToString());
+                driverProfile.WriteValue(driverID, dataBitsProfileName, dataBits.ToString(CultureInfo.InvariantCulture));
                 driverProfile.WriteValue(driverID, stopBitsProfileName, stopBits.ToString());
-                driverProfile.WriteValue(driverID, readTimeoutProfileName, readTimeout.ToString());
-                driverProfile.WriteValue(driverID, writeTimeoutProfileName, writeTimeout.ToString());
+                driverProfile.WriteValue(driverID, readTimeoutProfileName, readTimeout.ToString(CultureInfo.InvariantCulture));
+                driverProfile.WriteValue(driverID, writeTimeoutProfileName, writeTimeout.ToString(CultureInfo.InvariantCulture));
 
-                driverProfile.WriteValue(driverID, traceLoggerProfileName, traceLogger.Enabled.ToString());
+                driverProfile.WriteValue(driverID, traceLoggerProfileName, traceLogger.Enabled.ToString(CultureInfo.InvariantCulture));
             }
         }
 

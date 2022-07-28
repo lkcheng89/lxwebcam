@@ -1,6 +1,11 @@
 Changelog
 =========
 
+LxWebcam Driver v0.2
+--------------------
+
+* Fix exception issue while running under some locale settings.
+
 LxWebcam Driver v0.1
 --------------------
 
